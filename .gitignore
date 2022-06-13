@@ -1,0 +1,11 @@
+__pycache__
+.pytest_cache
+tempCodeRunnerFile.py
+
+files
+
+build
+dist
+inssa_framework.egg-info
+
+.DS_Store
