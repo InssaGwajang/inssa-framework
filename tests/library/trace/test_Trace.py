@@ -60,40 +60,43 @@ class TestTrace(TestCase):
         self.assertIsInstance(e, Trace)
         self.assertIsInstance(f, Trace)
 
-        self.assertTrue(a.CRITICAL("CRITICAL"))
-        self.assertTrue(b.ERROR("ERROR"))
-        self.assertFalse(b.INFO("INFO"))
-        self.assertTrue(c.WARNING("WARNING"))
-        self.assertTrue(d.INFO("INFO"))
-        self.assertTrue(e.INFO("INFO"))
-        self.assertFalse(f.DEBUG("DEBUG"))
+        self.assertIsNone(a.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(b.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(b.INFO("INFO"))  # assertFalse
+        self.assertIsNone(c.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(d.INFO("INFO"))  # assertTrue
+        self.assertIsNone(e.INFO("INFO"))  # assertTrue
+        self.assertIsNone(f.DEBUG("DEBUG"))  # assertFalse
 
         self.assertIsNone(Trace.set_stream(terminal="DEBUG"))
-        self.assertTrue(a.CRITICAL("CRITICAL"))
-        self.assertTrue(b.ERROR("ERROR"))
-        self.assertFalse(b.INFO("INFO"))
-        self.assertTrue(c.WARNING("WARNING"))
-        self.assertTrue(d.INFO("INFO"))
-        self.assertTrue(e.INFO("INFO"))
-        self.assertTrue(f.DEBUG("DEBUG"))
+
+        self.assertIsNone(a.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(b.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(b.INFO("INFO"))  # assertFalse
+        self.assertIsNone(c.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(d.INFO("INFO"))  # assertTrue
+        self.assertIsNone(e.INFO("INFO"))  # assertTrue
+        self.assertIsNone(f.DEBUG("DEBUG"))  # assertTrue
 
         self.assertIsNone(Trace.set_stream(terminal="WARNING", file="DEBUG"))
-        self.assertTrue(a.CRITICAL("CRITICAL"))
-        self.assertTrue(b.ERROR("ERROR"))
-        self.assertTrue(b.INFO("INFO"))
-        self.assertTrue(c.WARNING("WARNING"))
-        self.assertTrue(d.INFO("INFO"))
-        self.assertTrue(e.INFO("INFO"))
-        self.assertFalse(f.DEBUG("DEBUG"))
+
+        self.assertIsNone(a.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(b.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(b.INFO("INFO"))  # assertTrue
+        self.assertIsNone(c.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(d.INFO("INFO"))  # assertTrue
+        self.assertIsNone(e.INFO("INFO"))  # assertTrue
+        self.assertIsNone(f.DEBUG("DEBUG"))  # assertFalse
 
         self.assertIsNone(Trace.set_stream(terminal="NONE", file="NONE"))
-        self.assertFalse(a.CRITICAL("CRITICAL"))
-        self.assertFalse(b.ERROR("ERROR"))
-        self.assertFalse(b.INFO("INFO"))
-        self.assertFalse(c.WARNING("WARNING"))
-        self.assertFalse(d.INFO("INFO"))
-        self.assertFalse(e.INFO("INFO"))
-        self.assertFalse(f.DEBUG("DEBUG"))
+
+        self.assertIsNone(a.CRITICAL("CRITICAL"))  # assertFalse
+        self.assertIsNone(b.ERROR("ERROR"))  # assertFalse
+        self.assertIsNone(b.INFO("INFO"))  # assertFalse
+        self.assertIsNone(c.WARNING("WARNING"))  # assertFalse
+        self.assertIsNone(d.INFO("INFO"))  # assertFalse
+        self.assertIsNone(e.INFO("INFO"))  # assertFalse
+        self.assertIsNone(f.DEBUG("DEBUG"))  # assertFalse
 
     def test_set_group(self):
         self.assertIsNone(Trace.set_stream(terminal="INFO", file="DEBUG"))
@@ -104,26 +107,26 @@ class TestTrace(TestCase):
         self.assertIsInstance(a, Trace)
         self.assertIsInstance(b, Trace)
 
-        self.assertTrue(a.CRITICAL("CRITICAL"))
-        self.assertTrue(a.ERROR("ERROR"))
-        self.assertTrue(a.WARNING("WARNING"))
-        self.assertTrue(a.INFO("INFO"))
-        self.assertTrue(a.DEBUG("DEBUG"))
-        self.assertTrue(b.CRITICAL("CRITICAL"))
-        self.assertTrue(b.ERROR("ERROR"))
-        self.assertTrue(b.WARNING("WARNING"))
-        self.assertFalse(b.INFO("INFO"))
-        self.assertFalse(b.DEBUG("DEBUG"))
+        self.assertIsNone(a.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(a.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(a.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(a.INFO("INFO"))  # assertTrue
+        self.assertIsNone(a.DEBUG("DEBUG"))  # assertTrue
+        self.assertIsNone(b.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(b.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(b.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(b.INFO("INFO"))  # assertFalse
+        self.assertIsNone(b.DEBUG("DEBUG"))  # assertFalse
 
         self.assertIsNone(Trace.set_group("Trace", terminal="WARNING", file="CRITICAL"))
 
-        self.assertTrue(a.CRITICAL("CRITICAL"))
-        self.assertTrue(a.ERROR("ERROR"))
-        self.assertTrue(a.WARNING("WARNING"))
-        self.assertFalse(a.INFO("INFO"))
-        self.assertFalse(a.DEBUG("DEBUG"))
-        self.assertTrue(b.CRITICAL("CRITICAL"))
-        self.assertTrue(b.ERROR("ERROR"))
-        self.assertTrue(b.WARNING("WARNING"))
-        self.assertFalse(b.INFO("INFO"))
-        self.assertFalse(b.DEBUG("DEBUG"))
+        self.assertIsNone(a.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(a.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(a.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(a.INFO("INFO"))  # assertFalse
+        self.assertIsNone(a.DEBUG("DEBUG"))  # assertFalse
+        self.assertIsNone(b.CRITICAL("CRITICAL"))  # assertTrue
+        self.assertIsNone(b.ERROR("ERROR"))  # assertTrue
+        self.assertIsNone(b.WARNING("WARNING"))  # assertTrue
+        self.assertIsNone(b.INFO("INFO"))  # assertFalse
+        self.assertIsNone(b.DEBUG("DEBUG"))  # assertFalse

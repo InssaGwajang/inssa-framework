@@ -1,4 +1,4 @@
-from typing import Final, Dict, List, Optional, Callable, Iterable
+from typing import Final, Dict, List, Optional, Callable
 from functools import partial
 import logging, os, datetime
 
@@ -51,7 +51,7 @@ class Trace:
         file and setattr(Trace._STREAM, "_file", file)
         file_path and setattr(Trace._STREAM, "_file_path", file_path)
 
-        any(trace._initialize() for trace in Trace._TRACES)
+        any(trace._set_handlers() for trace in Trace._TRACES)
 
     @staticmethod
     def set_group(
@@ -62,7 +62,7 @@ class Trace:
     ) -> None:
         Trace._GROUPS[name] = _Stream(terminal, file)
 
-        any(trace._initialize() for trace in Trace._TRACES if trace._group == name)
+        any(trace._set_handlers() for trace in Trace._TRACES if trace._group == name)
 
     def __init__(
         self,
@@ -76,50 +76,50 @@ class Trace:
         self._group = group if group else ""
         self._stream = _Stream(terminal, file)
 
-        self._initialize()
+        self._set_handlers()
+
+        # NOTE: trace functions are exchanged in initialization phase
+        any(setattr(self, level, partial(self._TRACE, level)) for level in _LEVELS)
+
         Trace._TRACES.append(self)
 
-    def _initialize(self) -> None:
+    def _set_handlers(self) -> None:
         stream = Trace._GROUPS.get(self._group, self._stream)
-
-        for level in _LEVELS:
-            if handlers := [
-                getattr(_Handler, type)()
-                for type in ("terminal", "file")
-                if getattr(Trace._STREAM, f"_{type}") != "NONE"
-                and _LEVELS[getattr(Trace._STREAM, f"_{type}")] <= _LEVELS[level]
-                and getattr(stream, f"_{type}") != "NONE"
-                and _LEVELS[getattr(stream, f"_{type}")] <= _LEVELS[level]
-            ]:
-                setattr(self, f"_{level}s", handlers)
-                setattr(self, level, partial(self._trace, level))
-
-            else:
-                setattr(self, level, lambda *_: False)
-
-    def _trace(self, level: str, *args) -> bool:
-        for handler in getattr(self, f"_{level}s"):
-            handler(
-                f"[{self._group:10s}][{self._name:10s}][{level:8s}] "
-                + " ".join([str(arg) for arg in args])
+        any(
+            setattr(
+                self,
+                f"_{level}S",
+                [
+                    getattr(_Handler, type)()
+                    for type in ("terminal", "file")
+                    if getattr(Trace._STREAM, f"_{type}") != "NONE"
+                    and _LEVELS[getattr(Trace._STREAM, f"_{type}")] <= _LEVELS[level]
+                    and getattr(stream, f"_{type}") != "NONE"
+                    and _LEVELS[getattr(stream, f"_{type}")] <= _LEVELS[level]
+                ],
             )
+            for level in _LEVELS
+        )
 
-        return True
+    def CRITICAL(self, *args) -> None:
+        pass
 
-    def CRITICAL(self, *_) -> bool:
-        return False
+    def ERROR(self, *args) -> None:
+        pass
 
-    def ERROR(self, *_) -> bool:
-        return False
+    def WARNING(self, *args) -> None:
+        pass
 
-    def WARNING(self, *_) -> bool:
-        return False
+    def INFO(self, *args) -> None:
+        pass
 
-    def INFO(self, *_) -> bool:
-        return False
+    def DEBUG(self, *args) -> None:
+        pass
 
-    def DEBUG(self, *_) -> bool:
-        return False
+    def _TRACE(self, level: str, *args) -> None:
+        for handler in getattr(self, f"_{level}S"):
+            trace = f"[{self._group:10s}][{self._name:10s}][{level:8s}] {' '.join([str(arg) for arg in args])}"
+            handler(trace)
 
 
 class _Handler:
@@ -145,7 +145,7 @@ class _Handler:
         logger = logging.getLogger("file")
         logger.setLevel(logging.INFO)
 
-        directory_path = os.path.dirname(Trace._STREAM._file_path)
+        directory_path = os.path.dirname(os.path.abspath(Trace._STREAM._file_path))
         not os.path.exists(directory_path) and os.makedirs(directory_path)
 
         handler = logging.FileHandler(Trace._STREAM._file_path)
