@@ -37,8 +37,11 @@ class _Stream:
 
 class Trace:
     _STREAM: _Stream = _Stream("INFO", "NONE")
+
     _GROUPS: Dict = {}
-    _TRACES: List = []
+    _TRACES: Dict = {}
+
+    _OBJECTS: List = []
 
     @staticmethod
     def set_stream(
@@ -51,7 +54,18 @@ class Trace:
         file and setattr(Trace._STREAM, "_file", file)
         file_path and setattr(Trace._STREAM, "_file_path", file_path)
 
-        any(trace._set_handlers() for trace in Trace._TRACES)
+        any(trace._set_handlers() for trace in Trace._OBJECTS)
+
+    @staticmethod
+    def set_trace(
+        name: str,
+        *,
+        terminal: Optional[str] = None,
+        file: Optional[str] = None,
+    ) -> None:
+        Trace._TRACES[name] = _Stream(terminal, file)
+
+        any(trace._set_handlers() for trace in Trace._OBJECTS if trace._name == name)
 
     @staticmethod
     def set_group(
@@ -62,7 +76,7 @@ class Trace:
     ) -> None:
         Trace._GROUPS[name] = _Stream(terminal, file)
 
-        any(trace._set_handlers() for trace in Trace._TRACES if trace._group == name)
+        any(trace._set_handlers() for trace in Trace._OBJECTS if trace._group == name)
 
     def __init__(
         self,
@@ -81,10 +95,10 @@ class Trace:
         # NOTE: trace functions are exchanged in initialization phase
         any(setattr(self, level, partial(self._TRACE, level)) for level in _LEVELS)
 
-        Trace._TRACES.append(self)
+        Trace._OBJECTS.append(self)
 
     def _set_handlers(self) -> None:
-        stream = Trace._GROUPS.get(self._group, self._stream)
+        stream = Trace._TRACES.get(self._name, Trace._GROUPS.get(self._group, self._stream))
         any(
             setattr(
                 self,
@@ -101,25 +115,27 @@ class Trace:
             for level in _LEVELS
         )
 
-    def CRITICAL(self, *args) -> None:
-        pass
+    def CRITICAL(self, *args) -> True:
+        return True
 
-    def ERROR(self, *args) -> None:
-        pass
+    def ERROR(self, *args) -> True:
+        return True
 
-    def WARNING(self, *args) -> None:
-        pass
+    def WARNING(self, *args) -> True:
+        return True
 
-    def INFO(self, *args) -> None:
-        pass
+    def INFO(self, *args) -> True:
+        return True
 
-    def DEBUG(self, *args) -> None:
-        pass
+    def DEBUG(self, *args) -> True:
+        return True
 
-    def _TRACE(self, level: str, *args) -> None:
+    def _TRACE(self, level: str, *args) -> True:
         for handler in getattr(self, f"_{level}S"):
-            trace = f"[{self._group:10s}][{self._name:10s}][{level:8s}] {' '.join([str(arg) for arg in args])}"
+            trace = f"[{self._group:10s}][{self._name:10s}][{level:8s}] {' '.join((str(arg) for arg in args))}"
             handler(trace)
+
+        return True
 
 
 class _Handler:

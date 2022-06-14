@@ -2,7 +2,7 @@ from typing import Optional, Iterable, Callable
 import os
 from shutil import rmtree
 from ..trace.Trace import Trace
-from ..builtin.builtins import call
+from ..builtins.builtins import execute
 
 
 def clear(
@@ -19,10 +19,6 @@ def clear(
 
     TRACE = Trace("clear", group="Library").DEBUG
 
-    TRACE(f"clear")
-    TRACE(f"    root: {root}")
-    TRACE(f"    keywords: {', '.join(keywords)}")
-
     directories = [
         os.path.join(top, directory)
         for top, directories, _ in os.walk(root)
@@ -38,8 +34,8 @@ def clear(
         if keyword in file
     ]
 
-    TRACE(f"{len(directories)} directories, {len(files)} files from {len(keywords)} keywords")
-    any(TRACE(f"    {path}") for path in directories + files)
+    TRACE(f"clear {len(directories)} directories, {len(files)} files from {len(keywords)} keywords")
+    all(TRACE(f"    {path}") for path in directories + files)
 
-    any(call(rmtree, FileNotFoundError, directory) for directory in directories)
-    any(call(os.remove, FileNotFoundError, file) for file in files)
+    any(execute(FileNotFoundError, rmtree, directory) for directory in directories)
+    any(execute(FileNotFoundError, os.remove, file) for file in files)
