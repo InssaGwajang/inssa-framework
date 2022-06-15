@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
 from tempfile import TemporaryDirectory
 import logging
+
 from inssa.library import Trace
 
 
