@@ -3,7 +3,7 @@ from functools import partial, reduce
 from collections import OrderedDict
 import os, pickle, csv, json
 
-from ..builtins.builtins import kwargs
+from ..builtins.builtins import KWARGS
 from ..trace.Trace import Trace
 
 
@@ -35,7 +35,7 @@ class DictList:
             and self.DEBUG(f"init from file, {initial}")
             and self.read(
                 initial,
-                **kwargs(type=type, encoding=encoding, separator=separator),
+                **KWARGS(type=type, encoding=encoding, separator=separator),
             )
         )
         (

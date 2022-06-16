@@ -132,8 +132,8 @@ class Trace:
 
     def _TRACE(self, level: str, *args) -> True:
         for handler in getattr(self, f"_{level}S"):
-            trace = f"[{self._group:10s}][{self._name:10s}][{level:8s}] {' '.join((str(arg) for arg in args))}"
-            handler(trace)
+            message = f"[{self._group:10s}][{self._name:10s}][{level:8s}] {' '.join((str(arg) for arg in args))}"
+            handler(message)
 
         return True
 

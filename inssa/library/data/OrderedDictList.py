@@ -1,7 +1,6 @@
 from typing import Final, List, Dict, Tuple, Union, Optional, Any
-from functools import partial
 
-from ..builtins.builtins import kwargs
+from ..builtins.builtins import KWARGS, RAISE
 from ..trace.Trace import Trace
 from .DictList import DictList
 
@@ -26,7 +25,7 @@ class OrderedDictList(DictList):
         self._sort = lambda: self._data.sort(key=lambda element: element[self._key])
 
         super().__init__(
-            **kwargs(
+            **KWARGS(
                 initial=initial,
                 name=name,
                 type=type,
@@ -77,17 +76,16 @@ class OrderedDictList(DictList):
         overlap: Optional[bool] = None,
         sort: Optional[bool] = None,
     ) -> List:
-        return super().values(key if key else self._key, **kwargs(overlap=overlap, sort=sort))
+        return super().values(key if key else self._key, **KWARGS(overlap=overlap, sort=sort))
 
     def append(self, element: Dict) -> None:
-        super().append(element)
-        self._sort()
+        super().append(element) or self._sort()
 
     def extend(self, data: List[Dict]) -> None:
-        super().extend(data)
-        self._sort()
+        super().extend(data) or self._sort()
 
     def insert(self, element: Dict, *, index: int = 0) -> None:
-        self.CRITICAL("insert is not possible, data should be sorted")
-
-        raise ValueError("insert is not possible, data should be sorted")
+        (
+            self.CRITICAL((messages := "insert is not possible, data should be sorted"))
+            and RAISE(ValueError, messages)
+        )
