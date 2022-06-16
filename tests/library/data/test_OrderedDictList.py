@@ -23,69 +23,74 @@ from random import randint
 import os
 
 from test_references import members, candles
-from inssa.library import DictList
+from inssa.library import OrderedDictList
 
 
-class TestDictList(TestCase):
+class TestOrderedDictList(TestCase):
     def test_init(self):
-        self.assertIsInstance(DictList(), DictList)
-        for references in (members(), candles()):
-            self.assertIsInstance(DictList(references), DictList)
+        self.assertIsInstance(OrderedDictList("key"), OrderedDictList)
+
+        for key, references in (("name", members()), ("datetime", candles())):
+            self.assertIsInstance(OrderedDictList(key, references), OrderedDictList)
+
+        self.assertRaises(KeyError, OrderedDictList, "phone", members())
 
     def test_len(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
             self.assertEqual(len(data), len(references))
 
-            data = DictList()
-            self.assertIsInstance(data, DictList)
-            self.assertEqual(len(data), 0)
+            data = OrderedDictList(key)
+            self.assertIsInstance(data, OrderedDictList)
             self.assertIsNone(data.extend(references))
             self.assertEqual(len(data), len(references))
 
     def test_iter(self):
-        for references in (members(), candles()):
-            for element in DictList(references):
+        for key, references in (("name", members()), ("datetime", candles())):
+            for element in OrderedDictList(key, references):
                 self.assertIsInstance(element, dict)
 
     def test_index(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             index = randint(0, len(references) - 1)
-            self.assertEqual(data[index], references[index])
+            self.assertIn(data[index], references)
 
     def test_slice(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             index = randint(0, len(references) - 1)
-            self.assertListEqual(data[0:index], references[0:index])
+            for element in data[0:index]:
+                self.assertIn(element, references)
 
     def test_str(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             self.assertIsInstance(f"{data}", str)
 
     def test_print(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             self.assertIsNone(data.print())
 
     def test_get(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             self.assertIsNotNone(data.get())
-            self.assertIsNone(data.get("attr1"))
+
+            index = randint(0, len(references) - 1)
+            self.assertEqual(data.get(references[index][key]), references[index])
 
             index = randint(0, len(references) - 1)
             key = list(references[index].keys())[0]
@@ -110,12 +115,14 @@ class TestDictList(TestCase):
             )
 
     def test_items(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             self.assertTrue(data.items())
-            self.assertIsNone(data.items("attr1"))
+
+            index = randint(0, len(references) - 1)
+            self.assertTrue(data.items(references[index][key]))
 
             index = randint(0, len(references) - 1)
             key = list(references[index].keys())[0]
@@ -142,39 +149,35 @@ class TestDictList(TestCase):
             )
 
     def test_values(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             index = randint(0, len(references) - 1)
             key = list(references[index].keys())[0]
             self.assertTrue(data.values(key))
             self.assertTrue(data.values(key, overlap=False, sort=True))
 
-    def test_append(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+            self.assertTrue(data.values())
+            self.assertTrue(data.values(key))
 
-            self.assertIsNone(data.append({"key": "value"}))
-            self.assertEqual(len(data), len(references) + 1)
+    def test_append(self):
+        data = OrderedDictList("name", members())
+        self.assertIsInstance(data, OrderedDictList)
+
+        self.assertIsNone(data.append({"name": "name"}))
+        self.assertEqual(len(data), len(members()) + 1)
 
     def test_insert(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        data = OrderedDictList("name", members())
+        self.assertIsInstance(data, OrderedDictList)
 
-            self.assertIsNone(data.insert({"key": "value"}))
-            self.assertEqual(len(data), len(references) + 1)
-
-            index = randint(0, len(references) - 1)
-            self.assertIsNone(data.insert({"key": "value"}, index=index))
-            self.assertEqual(len(data), len(references) + 2)
+        self.assertRaises(ValueError, data.insert, {"name": "name"})
 
     def test_extend(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             self.assertIsNone(data.extend(references))
             self.assertEqual(len(data), len(references) * 2)
@@ -183,29 +186,28 @@ class TestDictList(TestCase):
             self.assertEqual(len(data), len(references) * 2)
 
     def test_remove(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             index = randint(0, len(references) - 1)
             self.assertIsNone(data.remove(references[index]))
             self.assertRaises(ValueError, data.remove, references[index])
 
     def test_pop(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
-            self.assertEqual(data.pop(), references[0])
             for _ in range(len(data)):
                 self.assertNotIn(data.pop(), data)
 
             self.assertRaises(IndexError, data.pop)
 
     def test_clear(self):
-        for references in (members(), candles()):
-            data = DictList(references)
-            self.assertIsInstance(data, DictList)
+        for key, references in (("name", members()), ("datetime", candles())):
+            data = OrderedDictList(key, references)
+            self.assertIsInstance(data, OrderedDictList)
 
             self.assertTrue(data.items())
             self.assertIsNone(data.clear())
@@ -216,9 +218,11 @@ class TestDictList(TestCase):
             for type in ("DictList", "csv", "json"):
                 path = os.path.join(directory, "file." + type)
 
-                self.assertTrue(DictList(members()).write(path))
-                self.assertListEqual(DictList(path).items(), members())
+                data = OrderedDictList("name", members())
+                self.assertTrue(data.write(path))
+                self.assertListEqual(OrderedDictList("name", path).items(), data.items())
 
                 path = os.path.join(directory, "file")
-                self.assertTrue(DictList(members()).write(path, type=type))
-                self.assertListEqual(DictList(path, type=type).items(), members())
+                data = OrderedDictList("name", members())
+                self.assertTrue(data.write(path, type=type))
+                self.assertListEqual(OrderedDictList("name", path, type=type).items(), data.items())

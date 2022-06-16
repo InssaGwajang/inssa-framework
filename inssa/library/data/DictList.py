@@ -24,8 +24,11 @@ class DictList:
         self._name = name if name else "-"
         self._data = []
 
-        self.WARNING = partial(_TRACE.WARNING, f"[{self._name}]")
-        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]")
+        self._trace = getattr(self, "_trace", _TRACE)
+        self.CRITICAL = partial(self._trace.CRITICAL, f"[{self._name}]")
+        self.WARNING = partial(self._trace.WARNING, f"[{self._name}]")
+        self.INFO = partial(self._trace.INFO, f"[{self._name}]")
+        self.DEBUG = partial(self._trace.DEBUG, f"[{self._name}]")
 
         (
             isinstance(initial, str)
@@ -71,7 +74,8 @@ class DictList:
     def __str__(self) -> str:
         return f"DictList({self._name}/count:{len(self)})"
 
-    def print(self, trace: Callable = _TRACE.INFO) -> None:
+    def print(self, trace: Optional[Callable] = None) -> None:
+        not trace and (trace := self.INFO)
         trace(self)
 
         if len(self) <= 6:
@@ -88,7 +92,6 @@ class DictList:
         attr2: Optional[Any] = None,
         /,
     ) -> Optional[Dict]:
-        print(attr1)
         if attr1 is None:
             return self._data[-1] if len(self._data) else None
 
