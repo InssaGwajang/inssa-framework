@@ -20,3 +20,8 @@ def execute(
 
 def RAISE(exception: Exception, message: str):
     raise exception(message)
+
+
+def LOOP(iterable: Iterable):
+    for _ in iterable:
+        pass

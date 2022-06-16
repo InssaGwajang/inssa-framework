@@ -3,7 +3,7 @@ from functools import partial, reduce
 from collections import OrderedDict
 import os, pickle, csv, json
 
-from ..builtins.builtins import KWARGS
+from ..builtins.builtins import KWARGS, LOOP
 from ..trace.Trace import Trace
 
 
@@ -79,12 +79,12 @@ class DictList:
         trace(self)
 
         if len(self) <= 6:
-            all(trace(f"[index:{index}] {element}") for index, element in enumerate(self))
+            LOOP(trace(f"[index:{index}] {element}") for index, element in enumerate(self))
 
         else:
-            all(trace(f"[index:{index}] {self[index]}") for index in (0, 1, 2))
+            LOOP(trace(f"[index:{index}] {self[index]}") for index in (0, 1, 2))
             trace("...")
-            all(trace(f"[index:{len(self) + index}] {self[index]}") for index in (-3, -2, -1))
+            LOOP(trace(f"[index:{len(self) + index}] {self[index]}") for index in (-3, -2, -1))
 
     def get(
         self,

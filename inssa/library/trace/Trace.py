@@ -2,6 +2,8 @@ from typing import Final, Dict, List, Optional, Callable
 from functools import partial
 import logging, os, datetime
 
+from ..builtins.builtins import execute, LOOP
+
 
 _LEVELS: Final = {
     "CRITICAL": 50,
@@ -54,7 +56,7 @@ class Trace:
         file and setattr(Trace._STREAM, "_file", file)
         file_path and setattr(Trace._STREAM, "_file_path", file_path)
 
-        any(trace._set_handlers() for trace in Trace._OBJECTS)
+        LOOP(trace._set_handlers() for trace in Trace._OBJECTS)
 
     @staticmethod
     def set_trace(
@@ -65,7 +67,7 @@ class Trace:
     ) -> None:
         Trace._TRACES[name] = _Stream(terminal, file)
 
-        any(trace._set_handlers() for trace in Trace._OBJECTS if trace._name == name)
+        LOOP(trace._set_handlers() for trace in Trace._OBJECTS if trace._name == name)
 
     @staticmethod
     def set_group(
@@ -76,7 +78,7 @@ class Trace:
     ) -> None:
         Trace._GROUPS[name] = _Stream(terminal, file)
 
-        any(trace._set_handlers() for trace in Trace._OBJECTS if trace._group == name)
+        LOOP(trace._set_handlers() for trace in Trace._OBJECTS if trace._group == name)
 
     def __init__(
         self,
@@ -93,13 +95,13 @@ class Trace:
         self._set_handlers()
 
         # NOTE: trace functions are exchanged in initialization phase
-        any(setattr(self, level, partial(self._TRACE, level)) for level in _LEVELS)
+        LOOP(setattr(self, level, partial(self._TRACE, level)) for level in _LEVELS)
 
         Trace._OBJECTS.append(self)
 
     def _set_handlers(self) -> None:
         stream = Trace._TRACES.get(self._name, Trace._GROUPS.get(self._group, self._stream))
-        any(
+        LOOP(
             setattr(
                 self,
                 f"_{level}S",

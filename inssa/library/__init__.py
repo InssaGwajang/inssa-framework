@@ -5,4 +5,4 @@ from .file.clear import clear
 
 from .trace.Trace import Trace
 
-from .builtins.builtins import KWARGS, execute, RAISE
+from .builtins.builtins import KWARGS, execute, RAISE, LOOP
