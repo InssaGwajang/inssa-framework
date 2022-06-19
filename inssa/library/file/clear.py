@@ -2,7 +2,7 @@ from typing import Optional, Iterable, Callable
 import os
 from shutil import rmtree
 from ..trace.Trace import Trace
-from ..builtins.builtins import execute, LOOP
+from ..builtins.builtins import CALL, LOOP
 
 
 def clear(
@@ -37,5 +37,5 @@ def clear(
     TRACE(f"clear {len(directories)} directories, {len(files)} files from {len(keywords)} keywords")
     LOOP(TRACE(f"    {path}") for path in directories + files)
 
-    LOOP(execute(FileNotFoundError, rmtree, directory) for directory in directories)
-    LOOP(execute(FileNotFoundError, os.remove, file) for file in files)
+    LOOP(CALL(rmtree, directory, passes=FileNotFoundError) for directory in directories)
+    LOOP(CALL(os.remove, file, passes=FileNotFoundError) for file in files)

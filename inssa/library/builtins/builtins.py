@@ -5,16 +5,16 @@ def KWARGS(**kwargs) -> Dict:
     return {key: value for key, value in kwargs.items() if value is not None}
 
 
-def execute(
-    exception: Union[Exception, Iterable[Exception]],
+def CALL(
     func: Callable,
     *args,
+    passes: Union[Exception, Iterable[Exception]] = [],
     **kwargs,
 ) -> Any:
     try:
         return func(*args, **kwargs)
 
-    except exception:
+    except passes:
         pass
 
 

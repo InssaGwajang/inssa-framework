@@ -2,7 +2,7 @@ from typing import Final, Dict, List, Optional, Callable
 from functools import partial
 import logging, os, datetime
 
-from ..builtins.builtins import execute, LOOP
+from ..builtins.builtins import LOOP
 
 
 _LEVELS: Final = {

@@ -22,18 +22,18 @@ from tempfile import TemporaryDirectory
 from typing import List, Any
 import os
 
-from inssa.library import KWARGS, execute, RAISE
+from inssa.library import KWARGS, CALL, RAISE
 
 
 class TestBuiltins(TestCase):
-    def test_kwargs(self):
+    def test_KWARGS(self):
         self.assertIn("attr1", KWARGS(attr1=3, attr2="attr2", attr3=[], attr4=None))
         self.assertIn("attr2", KWARGS(attr1=3, attr2="attr2", attr3=[], attr4=None))
         self.assertIn("attr3", KWARGS(attr1=3, attr2="attr2", attr3=[], attr4=None))
         self.assertNotIn("attr4", KWARGS(attr1=3, attr2="attr2", attr3=[], attr4=None))
         self.assertNotIn("attr5", KWARGS(attr1=3, attr2="attr2", attr3=[], attr4=None))
 
-    def test_kwargs_dict(self):
+    def test_KWARGS_dict(self):
         data = {"attr1": 3, "attr2": "attr2", "attr3": [], "attr4": None}
 
         self.assertIn("attr1", KWARGS(**data))
@@ -42,16 +42,16 @@ class TestBuiltins(TestCase):
         self.assertNotIn("attr4", KWARGS(**data))
         self.assertNotIn("attr5", KWARGS(**data))
 
-    def test_execute(self):
+    def test_CALL(self):
         def _func(attr: List) -> Any:
             return attr[0]
 
-        self.assertEqual(execute([], _func, [3, 4]), 3)
-        self.assertNotEqual(execute([], _func, [4]), 3)
+        self.assertEqual(CALL(_func, [3, 4]), 3)
+        self.assertNotEqual(CALL(_func, [4]), 3)
 
-        self.assertIsNone(execute(IndexError, _func, []), None)
-        self.assertRaises(TypeError, execute, [], _func, [])
-        self.assertRaises(IndexError, execute, TypeError, _func, [])
+        self.assertIsNone(CALL(_func, [], passes=IndexError), None)
+        self.assertRaises(TypeError, CALL, _func, [])
+        self.assertRaises(IndexError, CALL, _func, [], passes=TypeError)
 
-    def test_raise_(self):
+    def test_RAISE(self):
         self.assertRaises(KeyError, RAISE, KeyError, "KeyError")
