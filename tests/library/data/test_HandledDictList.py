@@ -18,6 +18,7 @@ if __name__ == "__main__":
     clear()
 
 
+from typing import Dict
 from tempfile import TemporaryDirectory
 from random import randint
 import os
@@ -35,11 +36,11 @@ class TestDictList(TestCase):
             HandledDictList,
         )
         for references in (members(), candles()):
-            self.assertIsInstance(HandledDictList([], references), HandledDictList)
+            self.assertIsInstance(HandledDictList([self._pass], references), HandledDictList)
 
     def test_len(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
             self.assertEqual(len(data), len(references))
 
@@ -53,12 +54,12 @@ class TestDictList(TestCase):
 
     def test_iter(self):
         for references in (members(), candles()):
-            for element in HandledDictList([], references):
+            for element in HandledDictList([self._pass], references):
                 self.assertIsInstance(element, dict)
 
     def test_index(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             index = randint(0, len(references) - 1)
@@ -66,7 +67,7 @@ class TestDictList(TestCase):
 
     def test_slice(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             index = randint(0, len(references) - 1)
@@ -74,21 +75,21 @@ class TestDictList(TestCase):
 
     def test_str(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertIsInstance(f"{data}", str)
 
     def test_print(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertIsNone(data.print())
 
     def test_get(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertIsNotNone(data.get())
@@ -118,7 +119,7 @@ class TestDictList(TestCase):
 
     def test_items(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertTrue(data.items())
@@ -150,7 +151,7 @@ class TestDictList(TestCase):
 
     def test_values(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             index = randint(0, len(references) - 1)
@@ -160,7 +161,7 @@ class TestDictList(TestCase):
 
     def test_append(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertIsNone(data.append({"key": "value"}))
@@ -168,14 +169,14 @@ class TestDictList(TestCase):
 
     def test_insert(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertRaises(ValueError, data.insert, {"key": "name"})
 
     def test_extend(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertIsNone(data.extend(references))
@@ -186,7 +187,7 @@ class TestDictList(TestCase):
 
     def test_remove(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             index = randint(0, len(references) - 1)
@@ -194,14 +195,14 @@ class TestDictList(TestCase):
 
     def test_pop(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertRaises(ValueError, data.pop)
 
     def test_clear(self):
         for references in (members(), candles()):
-            data = HandledDictList([], references)
+            data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
             self.assertRaises(ValueError, data.pop)
@@ -211,9 +212,28 @@ class TestDictList(TestCase):
             for type in ("DictList", "csv", "json"):
                 path = os.path.join(directory, "file." + type)
 
-                self.assertTrue(HandledDictList([], members()).write(path))
-                self.assertListEqual(HandledDictList([], path).items(), members())
+                self.assertTrue(HandledDictList([self._pass], members()).write(path))
+                self.assertListEqual(HandledDictList([self._pass], path).items(), members())
 
                 path = os.path.join(directory, "file")
-                self.assertTrue(HandledDictList([], members()).write(path, type=type))
-                self.assertListEqual(HandledDictList([], path, type=type).items(), members())
+                self.assertTrue(HandledDictList([self._pass], members()).write(path, type=type))
+                self.assertListEqual(
+                    HandledDictList([self._pass], path, type=type).items(), members()
+                )
+
+    def test_handle(self):
+        data = HandledDictList([self._count_keys], members())
+        self.assertIsInstance(data, HandledDictList)
+
+        index = randint(0, len(members()) - 1)
+        self.assertEqual(data[index]["count"], len(members()[index].keys()))
+
+    @staticmethod
+    def _pass(_: Dict, pipe: Dict) -> Dict:
+        return pipe
+
+    @staticmethod
+    def _count_keys(element: Dict, pipe: Dict) -> Dict:
+        element["count"] = len(element.keys())
+
+        return pipe
