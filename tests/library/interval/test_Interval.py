@@ -25,7 +25,7 @@ from inssa.library import Interval
 
 class TestInterval(TestCase):
     def test_init(self):
-        self.assertIsInstance(Interval(3), Interval)
+        self.assertIsInstance(Interval(3, name="TestInterval"), Interval)
         self.assertIsInstance(Interval(5.5), Interval)
 
     def test_start(self):

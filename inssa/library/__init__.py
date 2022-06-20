@@ -6,6 +6,7 @@ from .data.LinkedDictList import LinkedDictList
 from .file.clear import clear
 
 from .interval.Interval import Interval
+from .interval.Intervals import Intervals
 
 from .trace.Trace import Trace
 
