@@ -1,6 +1,7 @@
 from typing import Optional, Iterable, Callable
 import os
 from shutil import rmtree
+
 from ..trace.Trace import Trace
 from ..builtins.builtins import CALL, LOOP
 
