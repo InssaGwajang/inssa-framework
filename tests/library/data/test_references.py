@@ -27,7 +27,7 @@ def candles():
     )
 
 
-def hour_candles():
+def half_day_candles():
     return deepcopy(
         [
             {"datetime": datetime(2020, 1, 1, 00), "close": 5000, "high": 5200, "low": 4700},
