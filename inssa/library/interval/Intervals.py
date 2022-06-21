@@ -17,16 +17,20 @@ class Intervals:
         *,
         name: Optional[str] = None,
     ):
-        self._name = name if name else "-"
+        self.DEBUG = partial(_TRACE.DEBUG, f"[{name}]") if name else _TRACE.DEBUG
+
         self._file = (
-            os.path.join(os.getcwd(), "files", "interval", f"Intervals.{self._name}.DictList")
+            os.path.join(
+                os.getcwd(),
+                "files",
+                "interval",
+                "Intervals" + (f".{name}" if name else "") + ".DictList",
+            )
             if isinstance(file, bool) and file
             else file
         )
 
-        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]") if name else _TRACE.DEBUG
-
-        self._intervals = DictList(name=f"Intervals.{self._name}")
+        self._intervals = DictList(name="Intervals" + (f".{name}" if name else ""))
         self._file and self._intervals.read(self._file, type="DictList")
         not self._intervals and self._intervals.extend(
             [

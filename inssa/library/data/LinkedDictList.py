@@ -23,12 +23,12 @@ class LinkedDictList:
         *,
         name: Optional[str] = None,
     ):
-        self._name = name if name else "-"
+        self.INFO = partial(_TRACE.INFO, f"[{name}]") if name else _TRACE.INFO
+        self._prefix = f"{name}/" if name else ""
+
         self._key = key
         self._links = [[data, handles, 0, {}] for data, handles in links.items()]
         self._handles = handles if handles is not None else []
-
-        self.INFO = partial(_TRACE.INFO, f"[{self._name}]") if name else _TRACE.INFO
 
     def __len__(self) -> int:
         return len(self._links)
@@ -58,7 +58,7 @@ class LinkedDictList:
         )
 
     def __str__(self) -> str:
-        return f"LinkedDictList({self._name}/key:{self._key}/links:{len(self)}/handles:{len(self._handles)})"
+        return f"LinkedDictList({self._prefix}key:{self._key}/links:{len(self)}/handles:{len(self._handles)})"
 
     def print(self, trace: Optional[Callable] = None) -> None:
         not trace and (trace := self.INFO)

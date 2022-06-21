@@ -21,18 +21,14 @@ class DictList:
         encoding: Optional[str] = None,
         separator: Optional[str] = None,
     ):
-        self._name = name if name else "-"
-        self._data = []
+        trace = getattr(self, "_trace", _TRACE)
+        self.CRITICAL = partial(trace.CRITICAL, f"[{name}]") if name else trace.CRITICAL
+        self.WARNING = partial(trace.WARNING, f"[{name}]") if name else trace.WARNING
+        self.INFO = partial(trace.INFO, f"[{name}]") if name else trace.INFO
+        self.DEBUG = partial(trace.DEBUG, f"[{name}]") if name else trace.DEBUG
+        self._prefix = f"{name}/" if name else ""
 
-        self._trace = getattr(self, "_trace", _TRACE)
-        self.CRITICAL = (
-            partial(self._trace.CRITICAL, f"[{self._name}]") if name else self._trace.CRITICAL
-        )
-        self.WARNING = (
-            partial(self._trace.WARNING, f"[{self._name}]") if name else self._trace.WARNING
-        )
-        self.INFO = partial(self._trace.INFO, f"[{self._name}]") if name else self._trace.INFO
-        self.DEBUG = partial(self._trace.DEBUG, f"[{self._name}]") if name else self._trace.DEBUG
+        self._data = []
 
         (
             isinstance(initial, str)
@@ -76,7 +72,7 @@ class DictList:
         )
 
     def __str__(self) -> str:
-        return f"DictList({self._name}/count:{len(self)})"
+        return f"DictList({self._prefix}count:{len(self)})"
 
     def print(self, trace: Optional[Callable] = None) -> None:
         not trace and (trace := self.INFO)

@@ -36,7 +36,7 @@ class HandledDictList(DictList):
         )
 
     def __str__(self) -> str:
-        return f"HandledDictList({self._name}/handles:{len(self._handles)}/count:{len(self)})"
+        return f"HandledDictList({self._prefix}handles:{len(self._handles)}/count:{len(self)})"
 
     def _handle(self) -> None:
         LOOP(

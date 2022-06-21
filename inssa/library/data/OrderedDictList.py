@@ -35,7 +35,7 @@ class OrderedDictList(DictList):
         )
 
     def __str__(self) -> str:
-        return f"OrderedDictList({self._name}/key:{self._key}/count:{len(self)})"
+        return f"OrderedDictList({self._prefix}key:{self._key}/count:{len(self)})"
 
     def get(
         self,

@@ -9,15 +9,17 @@ _TRACE: Final = Trace("Interface", group="Framework")
 
 class Interface:
     def __init__(self, *, name: Optional[str] = None):
-        self._name = name if name else "-"
+        self.CRITICAL = partial(_TRACE.CRITICAL, f"[{name}]") if name else _TRACE.CRITICAL
+        self.INFO = partial(_TRACE.INFO, f"[{name}]") if name else _TRACE.INFO
+        self._prefix = f"{name}/" if name else ""
 
-        self.CRITICAL = partial(_TRACE.CRITICAL, f"[{self._name}]") if name else _TRACE.CRITICAL
-        self.INFO = partial(_TRACE.INFO, f"[{self._name}]") if name else _TRACE.INFO
-
-        self._interfaces = OrderedDictList("command", name=f"Interfaces.{self._name}")
+        self._interfaces = OrderedDictList(
+            "command",
+            name="Interfaces" + (f".{name}" if name else ""),
+        )
 
     def __str__(self) -> str:
-        return f"Interface({self._name}/count:{len(self._interfaces)})"
+        return f"Interface({self._prefix}count:{len(self._interfaces)})"
 
     def print(self, trace: Optional[Callable] = None) -> None:
         not trace and (trace := self.INFO)

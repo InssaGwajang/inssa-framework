@@ -15,11 +15,9 @@ class Interval:
         *,
         name: Optional[str] = None,
     ):
-        self._name = name if name else "-"
+        self.DEBUG = partial(_TRACE.DEBUG, f"[{name}]") if name else _TRACE.DEBUG
+
         self._interval = interval
-
-        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]") if name else _TRACE.DEBUG
-
         self._record = time.time() - 86400  # 24 hours * 60 minutes * 60 seconds
 
     def start(self) -> float:
