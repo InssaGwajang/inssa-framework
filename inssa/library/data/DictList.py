@@ -79,12 +79,12 @@ class DictList:
         trace(self)
 
         if len(self) <= 6:
-            LOOP(trace(f"{index}: {element}") for index, element in enumerate(self))
+            LOOP(trace(f"    {index}: {element}") for index, element in enumerate(self))
 
         else:
-            LOOP(trace(f"{index}: {self[index]}") for index in (0, 1, 2))
-            trace("...")
-            LOOP(trace(f"{len(self) + index}: {self[index]}") for index in (-3, -2, -1))
+            LOOP(trace(f"    {index}: {self[index]}") for index in (0, 1, 2))
+            trace("    ...")
+            LOOP(trace(f"    {len(self) + index}: {self[index]}") for index in (-3, -2, -1))
 
     def get(
         self,

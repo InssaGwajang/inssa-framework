@@ -34,12 +34,12 @@ def exception(*, terminate: bool = False) -> None:
     TRACE(f"call stack:")
     LOOP(
         TRACE(
-            ("   >>" if not index else "     "),
+            ("   --" if not index else "     "),
             (stack[0] + "()").ljust(widths[0]),
-            "in",
+            "from",
             stack[1].ljust(widths[1]) + ",",
             stack[2].ljust(widths[2]) + " line",
-            ("<<" if not index else ""),
+            ("--" if not index else ""),
         )
         for index, stack in enumerate(stacks)
     )

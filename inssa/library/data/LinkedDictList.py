@@ -64,7 +64,7 @@ class LinkedDictList:
         not trace and (trace := self.INFO)
         trace(self)
         LOOP(
-            trace(f"{index}: {link[_DATA]}/handles:{len(link[_HANDLES])}")
+            trace(f"    {index}: {link[_DATA]}/handles:{len(link[_HANDLES])}")
             for index, link in enumerate(self._links)
         )
 

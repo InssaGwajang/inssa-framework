@@ -28,6 +28,14 @@ class TestInterface(TestCase):
         self.assertIsInstance(Interface(), Interface)
         self.assertIsInstance(Interface(name="TestInterface"), Interface)
 
+    def test_str(self):
+        self.assertIsInstance(f"{Interface()}", str)
+        self.assertIsInstance(f"{Interface(name='TestInterface')}", str)
+
+    def test_print(self):
+        self.assertIsNone(Interface().print())
+        self.assertIsNone(Interface(name="TestInterface").print())
+
     def test_commands(self):
         interface = Interface()
         self.assertIsInstance(Interface(), Interface)
