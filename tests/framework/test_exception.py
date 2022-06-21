@@ -25,11 +25,11 @@ class TestInterval(TestCase):
     def test_exception(self):
         self.assertRaises(ValueError, exception)
 
-        def divide_zero() -> None:
+        def divide_zero() -> float:
             try:
-                1 / 0
+                return 1 / 0
 
             except Exception:
-                exception()
+                return exception()
 
-        self.assertIsNone(divide_zero())
+        self.assertIsInstance(divide_zero(), str)

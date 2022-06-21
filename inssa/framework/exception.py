@@ -7,7 +7,7 @@ from ..library import Trace, LOOP
 _TRACE: Final = Trace("exception", group="Framework")
 
 
-def exception(*, terminate: bool = False) -> None:
+def exception(*, terminate: bool = False) -> str:
     TRACE = _TRACE.CRITICAL
 
     exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -29,12 +29,11 @@ def exception(*, terminate: bool = False) -> None:
         max([len(stack[1]) for stack in stacks]),
         max([len(stack[2]) for stack in stacks]),
     )
-
-    TRACE(f"exception {exc_type.__name__} raised for {exc_value}")
+    TRACE((message := f"exception {exc_type.__name__} raised for {exc_value}"))
     TRACE(f"call stack:")
     LOOP(
         TRACE(
-            ("   --" if not index else "     "),
+            f"    {index}:",
             (stack[0] + "()").ljust(widths[0]),
             "from",
             stack[1].ljust(widths[1]) + ",",
@@ -46,3 +45,5 @@ def exception(*, terminate: bool = False) -> None:
 
     if terminate:
         sys.exit()
+
+    return message

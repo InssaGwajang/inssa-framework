@@ -24,7 +24,7 @@ class Intervals:
             else file
         )
 
-        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]")
+        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]") if name else _TRACE.DEBUG
 
         self._intervals = DictList(name=f"Intervals.{self._name}")
         self._file and self._intervals.read(self._file, type="DictList")

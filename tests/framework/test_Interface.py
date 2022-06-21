@@ -49,6 +49,7 @@ class TestInterface(TestCase):
         self.assertIsInstance(Interface(), Interface)
 
         self.assertIsNone(interface.register("command", "func"))
+        self.assertIsNone(interface.register("internal", "func", internal=True))
         self.assertRaises(ValueError, interface.register, "command", "func")
 
     def test_remove(self):

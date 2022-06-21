@@ -25,10 +25,14 @@ class DictList:
         self._data = []
 
         self._trace = getattr(self, "_trace", _TRACE)
-        self.CRITICAL = partial(self._trace.CRITICAL, f"[{self._name}]")
-        self.WARNING = partial(self._trace.WARNING, f"[{self._name}]")
-        self.INFO = partial(self._trace.INFO, f"[{self._name}]")
-        self.DEBUG = partial(self._trace.DEBUG, f"[{self._name}]")
+        self.CRITICAL = (
+            partial(self._trace.CRITICAL, f"[{self._name}]") if name else self._trace.CRITICAL
+        )
+        self.WARNING = (
+            partial(self._trace.WARNING, f"[{self._name}]") if name else self._trace.WARNING
+        )
+        self.INFO = partial(self._trace.INFO, f"[{self._name}]") if name else self._trace.INFO
+        self.DEBUG = partial(self._trace.DEBUG, f"[{self._name}]") if name else self._trace.DEBUG
 
         (
             isinstance(initial, str)

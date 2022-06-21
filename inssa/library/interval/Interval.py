@@ -18,7 +18,7 @@ class Interval:
         self._name = name if name else "-"
         self._interval = interval
 
-        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]")
+        self.DEBUG = partial(_TRACE.DEBUG, f"[{self._name}]") if name else _TRACE.DEBUG
 
         self._record = time.time() - 86400  # 24 hours * 60 minutes * 60 seconds
 

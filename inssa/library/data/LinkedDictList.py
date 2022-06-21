@@ -28,7 +28,7 @@ class LinkedDictList:
         self._links = [[data, handles, 0, {}] for data, handles in links.items()]
         self._handles = handles if handles is not None else []
 
-        self.INFO = partial(_TRACE.INFO, f"[{self._name}]")
+        self.INFO = partial(_TRACE.INFO, f"[{self._name}]") if name else _TRACE.INFO
 
     def __len__(self) -> int:
         return len(self._links)
