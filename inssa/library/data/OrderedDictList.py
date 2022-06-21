@@ -86,6 +86,6 @@ class OrderedDictList(DictList):
 
     def insert(self, element: Dict, *, index: int = 0) -> None:
         (
-            self.CRITICAL((messages := "insert is not possible, data should be sorted"))
-            and RAISE(ValueError, messages)
+            self.CRITICAL((message := "insert failed, data should be sorted"))
+            and RAISE(ValueError, message)
         )

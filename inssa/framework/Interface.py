@@ -36,8 +36,8 @@ class Interface:
     def register(self, command: str, func: Callable, *, internal: bool = False) -> None:
         (
             self._interfaces.get(command)
-            and self.CRITICAL((messages := f"register failed, {command} is already registered"))
-            and RAISE(ValueError, messages)
+            and self.CRITICAL((message := f"register failed, {command} is already registered"))
+            and RAISE(ValueError, message)
         )
 
         self._interfaces.append({"command": command, "func": func, "internal": internal})
@@ -45,8 +45,8 @@ class Interface:
     def remove(self, command: str) -> None:
         (
             not (interface := self._interfaces.get(command))
-            and self.CRITICAL((messages := f"remove failed, {command} is not registered"))
-            and RAISE(ValueError, messages)
+            and self.CRITICAL((message := f"remove failed, {command} is not registered"))
+            and RAISE(ValueError, message)
         )
 
         self._interfaces.remove(interface)
@@ -54,8 +54,8 @@ class Interface:
     def call(self, command: str, *args, **kwargs) -> Any:
         (
             not (interface := self._interfaces.get(command))
-            and self.CRITICAL((messages := f"call failed, {command} is not registered"))
-            and RAISE(ValueError, messages)
+            and self.CRITICAL((message := f"call failed, {command} is not registered"))
+            and RAISE(ValueError, message)
         )
 
         return interface["func"](*args, **kwargs)

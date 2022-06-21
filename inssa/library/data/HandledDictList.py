@@ -53,24 +53,24 @@ class HandledDictList(DictList):
 
     def insert(self, element: Dict, *, index: int = 0) -> None:
         (
-            self.CRITICAL((messages := "insert is not possible, data can not be handled"))
-            and RAISE(ValueError, messages)
+            self.CRITICAL((message := "insert failed, data can not be handled"))
+            and RAISE(ValueError, message)
         )
 
     def remove(self, element: Dict) -> None:
         (
-            self.CRITICAL((messages := "remove is not possible, data can not be handled"))
-            and RAISE(ValueError, messages)
+            self.CRITICAL((message := "remove failed, data can not be handled"))
+            and RAISE(ValueError, message)
         )
 
     def pop(self, index: Optional[int] = 0) -> Dict:
         (
-            self.CRITICAL((messages := "pop is not possible, data can not be handled"))
-            and RAISE(ValueError, messages)
+            self.CRITICAL((message := "pop failed, data can not be handled"))
+            and RAISE(ValueError, message)
         )
 
     def clear(self) -> None:
         (
-            self.CRITICAL((messages := "clear is not possible, data can not be handled"))
-            and RAISE(ValueError, messages)
+            self.CRITICAL((message := "clear failed, data can not be handled"))
+            and RAISE(ValueError, message)
         )
