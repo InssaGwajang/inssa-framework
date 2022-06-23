@@ -20,7 +20,7 @@ class Interval:
         self._interval = interval
         self._record = time.time() - 86400  # 24 hours * 60 minutes * 60 seconds
 
-    def start(self) -> float:
+    def leave(self) -> float:
         (
             (delay := self._interval - (time.time() - self._record)) > 0
             and self.DEBUG(f"interval delay {delay} seconds")

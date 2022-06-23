@@ -30,28 +30,28 @@ class TestIntervals(TestCase):
         self.assertIsInstance(Intervals({5: 10, 60: 100}, file="TestIntervals.DictList"), Intervals)
         self.assertIsInstance(Intervals({5: 10, 60: 100}, name="TestIntervals"), Intervals)
 
-    def test_start(self):
+    def test_leave(self):
         intervals = Intervals({0.1: 2, 0.2: 3})
 
-        self.assertEqual(intervals.start(), 0)
-        self.assertEqual(intervals.start(), 0)
-        self.assertNotEqual(intervals.start(), 0)
+        self.assertEqual(intervals.leave(), 0)
+        self.assertEqual(intervals.leave(), 0)
+        self.assertNotEqual(intervals.leave(), 0)
 
     def test_file(self):
         intervals = Intervals({0.1: 2, 0.2: 3})
-        self.assertEqual(intervals.start(), 0)
-        self.assertEqual(intervals.start(), 0)
+        self.assertEqual(intervals.leave(), 0)
+        self.assertEqual(intervals.leave(), 0)
 
         intervals = Intervals({0.1: 2, 0.2: 3})
-        self.assertEqual(intervals.start(), 0)
-        self.assertEqual(intervals.start(), 0)
+        self.assertEqual(intervals.leave(), 0)
+        self.assertEqual(intervals.leave(), 0)
 
         with TemporaryDirectory() as directory:
             file = os.path.join(directory, "TestIntervals.DictList")
 
             intervals = Intervals({0.1: 2, 0.2: 3}, file)
-            self.assertEqual(intervals.start(), 0)
-            self.assertEqual(intervals.start(), 0)
+            self.assertEqual(intervals.leave(), 0)
+            self.assertEqual(intervals.leave(), 0)
 
             intervals = Intervals({0.1: 2, 0.2: 3}, file)
-            self.assertNotEqual(intervals.start(), 0)
+            self.assertNotEqual(intervals.leave(), 0)

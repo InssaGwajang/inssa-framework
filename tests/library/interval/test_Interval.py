@@ -28,10 +28,10 @@ class TestInterval(TestCase):
         self.assertIsInstance(Interval(3, name="TestInterval"), Interval)
         self.assertIsInstance(Interval(5.5), Interval)
 
-    def test_start(self):
+    def test_leave(self):
         interval = Interval(0.1)
-        self.assertEqual(interval.start(), 0)
+        self.assertEqual(interval.leave(), 0)
 
         sleep(0.1)
-        self.assertEqual(interval.start(), 0)
-        self.assertNotEqual(interval.start(), 0)
+        self.assertEqual(interval.leave(), 0)
+        self.assertNotEqual(interval.leave(), 0)

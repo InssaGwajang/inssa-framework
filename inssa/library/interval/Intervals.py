@@ -39,7 +39,7 @@ class Intervals:
             ]
         )
 
-    def start(self) -> float:
+    def leave(self) -> float:
         total = 0
         for interval in self._intervals:
             interval["records"] = [
