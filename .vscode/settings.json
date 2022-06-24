@@ -1,5 +1,9 @@
 {
     "cSpell.words": [
-        "inssa"
+        "dateutil",
+        "inssa",
+        "pyjwt",
+        "relativedelta",
+        "Upbit"
     ]
 }

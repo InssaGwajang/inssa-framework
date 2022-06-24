@@ -7,8 +7,9 @@ from ..builtins.builtins import KWARGS, LOOP
 from ..trace.Trace import Trace
 
 
-_TYPES: Final = ("DictList", "csv", "json")
 _TRACE: Final = Trace("DictList", group="Library")
+
+_TYPES: Final = ("DictList", "csv", "json")
 
 
 class DictList:

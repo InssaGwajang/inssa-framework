@@ -1,8 +1,22 @@
-from typing import Dict, Callable, Union, Iterable, Any
+from typing import Dict, Callable, Union, Iterable, Any, Optional
 
 
 def KWARGS(**kwargs) -> Dict:
     return {key: value for key, value in kwargs.items() if value is not None}
+
+
+def PARAMS(**kwargs) -> Optional[Dict]:
+    return (
+        params
+        if (params := {key: value for key, value in kwargs.items() if value is not None})
+        else None
+    )
+
+
+def GETATTR(o, n: str, f: Callable, *args, **kwargs) -> Any:
+    not hasattr(o, n) and setattr(o, n, f(*args, **kwargs))
+
+    return getattr(o, n)
 
 
 def CALL(

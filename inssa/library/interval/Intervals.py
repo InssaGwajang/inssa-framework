@@ -23,7 +23,7 @@ class Intervals:
             os.path.join(
                 os.getcwd(),
                 "files",
-                "interval",
+                "intervals",
                 "Intervals" + (f".{name}" if name else "") + ".DictList",
             )
             if isinstance(file, bool) and file
