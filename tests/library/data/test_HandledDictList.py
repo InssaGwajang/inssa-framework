@@ -23,7 +23,7 @@ from tempfile import TemporaryDirectory
 from random import randint
 import os
 
-from test_references import members, candles
+from references import members, candles
 from inssa.library import HandledDictList
 
 

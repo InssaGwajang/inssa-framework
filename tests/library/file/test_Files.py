@@ -20,11 +20,11 @@ if __name__ == "__main__":
 
 import os
 
-from test_references import members
+from references import members
 from inssa.library import Files
 
 
-_PATH = os.path.join(os.path.dirname(__file__), "test_Files_references")
+_PATH = os.path.join(os.path.dirname(__file__), "Files_references")
 
 
 class TestFiles(TestCase):

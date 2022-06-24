@@ -23,7 +23,7 @@ from tempfile import TemporaryDirectory
 from random import randint
 import os
 
-from test_references import candles, half_day_candles
+from references import candles, half_day_candles
 from inssa.library import LinkedDictList, DictList
 
 
