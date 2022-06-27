@@ -98,7 +98,7 @@ class TestLinkedDictList(TestCase):
             },
         )
         self.assertIsInstance(links, LinkedDictList)
-        self.assertListEqual(links[0:][0].items(), candles())
+        self.assertListEqual(list(links[0:][0].items()), candles())
 
     def test_str(self):
         links = LinkedDictList(

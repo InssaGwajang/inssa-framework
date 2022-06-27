@@ -122,8 +122,8 @@ class TestDictList(TestCase):
             data = HandledDictList([self._pass], references)
             self.assertIsInstance(data, HandledDictList)
 
-            self.assertTrue(data.items())
-            self.assertIsNone(data.items("attr1"))
+            self.assertTrue(list(data.items()))
+            self.assertFalse(list(data.items("attr1")))
 
             index = randint(0, len(references) - 1)
             key = list(references[index].keys())[0]
@@ -213,12 +213,12 @@ class TestDictList(TestCase):
                 path = os.path.join(directory, "file." + type)
 
                 self.assertTrue(HandledDictList([self._pass], members()).write(path))
-                self.assertListEqual(HandledDictList([self._pass], path).items(), members())
+                self.assertListEqual(list(HandledDictList([self._pass], path).items()), members())
 
                 path = os.path.join(directory, "file")
                 self.assertTrue(HandledDictList([self._pass], members()).write(path, type=type))
                 self.assertListEqual(
-                    HandledDictList([self._pass], path, type=type).items(), members()
+                    list(HandledDictList([self._pass], path, type=type).items()), members()
                 )
 
     def test_handle(self):

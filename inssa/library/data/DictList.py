@@ -116,26 +116,32 @@ class DictList:
         attr1: Union[str, Dict, List, Tuple] = None,
         attr2: Optional[Any] = None,
         /,
-    ) -> List[Dict]:
+    ):  # -> DictList
         if attr1 is None:
-            return self._data
+            return DictList(self._data)
 
         elif attr2 is not None:  # attr1: key, attr2: value
-            return [e for e in self._data if attr1 in e and e[attr1] == attr2]
+            return DictList([e for e in self._data if attr1 in e and e[attr1] == attr2])
 
         elif isinstance(attr1, dict):  # attr1: queries: Dict[str, Any]
-            return [
-                element
-                for element in self._data
-                if all([(k in element and element[k] == v) for k, v in attr1.items()])
-            ]
+            return DictList(
+                [
+                    element
+                    for element in self._data
+                    if all([(k in element and element[k] == v) for k, v in attr1.items()])
+                ]
+            )
 
         elif isinstance(attr1, (list, tuple)):  # attr1: queries: Iterable[List[str, Any]]
-            return [
-                element
-                for element in self._data
-                if all([(k in element and element[k] == v) for k, v in attr1])
-            ]
+            return DictList(
+                [
+                    element
+                    for element in self._data
+                    if all([(k in element and element[k] == v) for k, v in attr1])
+                ]
+            )
+
+        return DictList()
 
     def values(self, key: str, *, overlap: bool = True, sort: bool = False) -> List:
         values = [element[key] for element in self._data if key in element]

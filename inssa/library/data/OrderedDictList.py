@@ -63,9 +63,9 @@ class OrderedDictList(DictList):
         attr1: Union[str, Dict, List, Tuple] = None,
         attr2: Optional[Any] = None,
         /,
-    ) -> List[Dict]:
+    ) -> DictList:
         return (
-            [element for element in self._data if element[self._key] == attr1]
+            DictList([element for element in self._data if element[self._key] == attr1])
             if attr2 is None and attr1 and not isinstance(attr1, (dict, list, tuple))
             else super().items(attr1, attr2)
         )

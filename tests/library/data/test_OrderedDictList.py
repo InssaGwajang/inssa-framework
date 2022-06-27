@@ -220,9 +220,13 @@ class TestOrderedDictList(TestCase):
 
                 data = OrderedDictList("name", members())
                 self.assertTrue(data.write(path))
-                self.assertListEqual(OrderedDictList("name", path).items(), data.items())
+                self.assertListEqual(
+                    list(OrderedDictList("name", path).items()), list(data.items())
+                )
 
                 path = os.path.join(directory, "file")
                 data = OrderedDictList("name", members())
                 self.assertTrue(data.write(path, type=type))
-                self.assertListEqual(OrderedDictList("name", path, type=type).items(), data.items())
+                self.assertListEqual(
+                    list(OrderedDictList("name", path, type=type).items()), list(data.items())
+                )

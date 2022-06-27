@@ -114,8 +114,8 @@ class TestDictList(TestCase):
             data = DictList(references)
             self.assertIsInstance(data, DictList)
 
-            self.assertTrue(data.items())
-            self.assertIsNone(data.items("attr1"))
+            self.assertTrue(list(data.items()))
+            self.assertFalse(list(data.items("attr1")))
 
             index = randint(0, len(references) - 1)
             key = list(references[index].keys())[0]
@@ -217,8 +217,8 @@ class TestDictList(TestCase):
                 path = os.path.join(directory, "file." + type)
 
                 self.assertTrue(DictList(members()).write(path))
-                self.assertListEqual(DictList(path).items(), members())
+                self.assertListEqual(list(DictList(path).items()), members())
 
                 path = os.path.join(directory, "file")
                 self.assertTrue(DictList(members()).write(path, type=type))
-                self.assertListEqual(DictList(path, type=type).items(), members())
+                self.assertListEqual(list(DictList(path, type=type).items()), members())
