@@ -22,10 +22,9 @@ class DictList:
         encoding: Optional[str] = None,
         separator: Optional[str] = None,
     ):
-        trace = getattr(self, "_trace", _TRACE)
+        trace = self._TRACE = getattr(self, "_TRACE", _TRACE)
         self.CRITICAL = partial(trace.CRITICAL, f"[{name}]") if name else trace.CRITICAL
         self.WARNING = partial(trace.WARNING, f"[{name}]") if name else trace.WARNING
-        self.INFO = partial(trace.INFO, f"[{name}]") if name else trace.INFO
         self.DEBUG = partial(trace.DEBUG, f"[{name}]") if name else trace.DEBUG
         self._prefix = f"{name}/" if name else ""
 
@@ -75,11 +74,11 @@ class DictList:
     def __str__(self) -> str:
         return f"DictList({self._prefix}count:{len(self)})"
 
-    def print(self, trace: Optional[Callable] = None) -> None:
-        not trace and (trace := self.INFO)
+    def print(self, *, trace: Optional[Callable] = None, all: Optional[bool] = None) -> None:
+        not trace and (trace := self._TRACE.INFO)
         trace(self)
 
-        if len(self) <= 6:
+        if len(self) <= 6 or all:
             LOOP(trace(f"    {index}: {element}") for index, element in enumerate(self))
 
         else:

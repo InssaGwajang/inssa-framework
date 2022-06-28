@@ -20,7 +20,7 @@ class HandledDictList(DictList):
         encoding: Optional[str] = None,
         separator: Optional[str] = None,
     ):
-        self._trace = _TRACE
+        self._TRACE = _TRACE
 
         self._handles = handles
         self._handled = 0

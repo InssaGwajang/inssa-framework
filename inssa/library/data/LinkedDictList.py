@@ -23,7 +23,6 @@ class LinkedDictList:
         *,
         name: Optional[str] = None,
     ):
-        self.INFO = partial(_TRACE.INFO, f"[{name}]") if name else _TRACE.INFO
         self._prefix = f"{name}/" if name else ""
 
         self._key = key
@@ -61,7 +60,7 @@ class LinkedDictList:
         return f"LinkedDictList({self._prefix}key:{self._key}/links:{len(self)}/handles:{len(self._handles)})"
 
     def print(self, trace: Optional[Callable] = None) -> None:
-        not trace and (trace := self.INFO)
+        not trace and (trace := _TRACE.INFO)
         trace(self)
         LOOP(
             trace(f"    {index}: {link[_DATA]}/handles:{len(link[_HANDLES])}")

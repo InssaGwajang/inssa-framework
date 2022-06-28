@@ -13,8 +13,6 @@ _TRACE: Final = Trace("Files", group="Library")
 
 class Files:
     def __init__(self, root: str, *, name: Optional[str] = None):
-        self.CRITICAL = partial(_TRACE.CRITICAL, f"[{name}]") if name else _TRACE.CRITICAL
-        self.INFO = partial(_TRACE.INFO, f"[{name}]") if name else _TRACE.INFO
         self._prefix = f"{name}/" if name else ""
 
         root = os.path.realpath(root)
@@ -48,9 +46,9 @@ class Files:
         return f"Files({self._prefix}count:{len(self._files)})"
 
     def print(self, trace: Optional[Callable] = None) -> None:
-        not trace and (trace := self.INFO)
+        not trace and (trace := _TRACE.INFO)
         trace(self)
-        self._files.print(trace=trace)
+        self._files.print(trace=trace, all=True)
 
     def files(self) -> List[str]:
         return self._files.values()
@@ -58,7 +56,8 @@ class Files:
     def module(self, file: str, module: str) -> Any:
         (
             not (f := self._files.get(file))
-            and self.CRITICAL((message := f"module failed, {file} is not exist"))
+            and _TRACE.CRITICAL((message := f"module failed, {file} is not exist"))
+            and not self.print(_TRACE.CRITICAL)
             and RAISE(ValueError, message)
         )
 
@@ -68,7 +67,8 @@ class Files:
     def json(self, file: str, *, encoding: str = "UTF-8-sig") -> Any:
         (
             not (f := self._files.get(file))
-            and self.CRITICAL((message := f"json failed, {file} is not exist"))
+            and _TRACE.CRITICAL((message := f"json failed, {file} is not exist"))
+            and not self.print(_TRACE.CRITICAL)
             and RAISE(ValueError, message)
         )
 

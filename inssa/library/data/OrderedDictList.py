@@ -19,7 +19,7 @@ class OrderedDictList(DictList):
         encoding: Optional[str] = None,
         separator: Optional[str] = None,
     ):
-        self._trace = _TRACE
+        self._TRACE = _TRACE
 
         self._key = key
         self._sort = lambda: self._data.sort(key=lambda element: element[self._key])
