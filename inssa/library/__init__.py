@@ -13,4 +13,5 @@ from .interval.Intervals import Intervals
 
 from .trace.Trace import Trace
 
+from .trade.KRX import KRX
 from .trade.Upbit import Upbit

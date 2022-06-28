@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
 
 from tempfile import TemporaryDirectory
-from random import randint
+from random import choice
 
 from inssa.library import Upbit
 
@@ -32,6 +32,4 @@ class TestUpbit(TestCase):
         self.assertTrue(Upbit.markets())
 
     def test_candles(self):
-        markets = Upbit.markets()
-        index = randint(0, len(markets) - 1)
-        self.assertTrue(Upbit.candles(markets[index], "month"))
+        self.assertNotEqual(len(Upbit.candles(choice(Upbit.markets()), "month")), 0)
