@@ -13,12 +13,6 @@ def PARAMS(**kwargs) -> Optional[Dict]:
     )
 
 
-def GETATTR(o, n: str, f: Callable, *args, **kwargs) -> Any:
-    not hasattr(o, n) and setattr(o, n, f(*args, **kwargs))
-
-    return getattr(o, n)
-
-
 def CALL(
     func: Callable,
     *args,

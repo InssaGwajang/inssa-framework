@@ -1,4 +1,4 @@
-from .builtins.builtins import KWARGS, PARAMS, GETATTR, CALL, RAISE, LOOP
+from .builtins.builtins import KWARGS, PARAMS, CALL, RAISE, LOOP
 
 from .data.DictList import DictList
 from .data.OrderedDictList import OrderedDictList

@@ -3,7 +3,7 @@ from requests import request  # pip install requests
 from dateutil.relativedelta import relativedelta  # pip install python-dateutil
 import datetime
 
-from ..builtins.builtins import PARAMS, RAISE, GETATTR
+from ..builtins.builtins import PARAMS, RAISE
 from ..trace.Trace import Trace
 from ..data.OrderedDictList import OrderedDictList
 from ..interval.Intervals import Intervals
@@ -108,21 +108,23 @@ class Upbit:
 
     @staticmethod
     def _markets() -> OrderedDictList:
-        return GETATTR(
+        not hasattr(Upbit, "_markets_") and setattr(
             Upbit,
             "_markets_",
-            OrderedDictList,
-            "market",
-            [
-                {
-                    "market": market["market"],
-                    "name": market["english_name"],
-                    "korean": market["korean_name"],
-                }
-                for market in Upbit._request("https://api.upbit.com/v1/market/all")[0]
-            ],
-            name="Upbit.markets",
+            OrderedDictList(
+                "market",
+                [
+                    {
+                        "market": market["market"],
+                        "name": market["english_name"],
+                        "korean": market["korean_name"],
+                    }
+                    for market in Upbit._request("https://api.upbit.com/v1/market/all")[0]
+                ],
+                name="Upbit.markets",
+            ),
         )
+        return Upbit._markets_
 
     @staticmethod
     def _request(
@@ -132,7 +134,10 @@ class Upbit:
         params: Optional[Dict] = None,
         # keys: Optional[Tuple] = None,  # TODO: for authorization
     ) -> (Any, datetime.datetime):
-        GETATTR(Upbit, "_intervals", Intervals, {1: 9, 60: 599}, name="Upbit").leave()
+        not hasattr(Upbit, "_intervals") and setattr(
+            Upbit, "_intervals", Intervals({1: 9, 60: 599}, name="Upbit")
+        )
+        Upbit._intervals.leave()
 
         response = request(method, url, params=params)
         (
