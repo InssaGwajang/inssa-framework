@@ -5,6 +5,8 @@ from .data.OrderedDictList import OrderedDictList
 from .data.HandledDictList import HandledDictList
 from .data.LinkedDictList import LinkedDictList
 
+from .database.MongoDB import MongoDB
+
 from .file.clear import clear
 from .file.Files import Files
 

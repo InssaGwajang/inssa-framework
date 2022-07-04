@@ -3,6 +3,7 @@
         "dateutil",
         "inssa",
         "pyjwt",
+        "pymongo",
         "relativedelta",
         "Upbit"
     ]

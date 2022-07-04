@@ -15,7 +15,7 @@ _TYPES: Final = ("DictList", "csv", "json")
 class DictList:
     def __init__(
         self,
-        initial: Optional[Union[str, List, Tuple]] = None,
+        initial: Optional[Union[str, Iterable]] = None,
         *,
         name: Optional[str] = None,
         type: Optional[str] = None,
@@ -38,11 +38,7 @@ class DictList:
                 **KWARGS(type=type, encoding=encoding, separator=separator),
             )
         )
-        (
-            isinstance(initial, (list, tuple))
-            and self.DEBUG(f"init from data, count is {len(initial)}")
-            and self.extend(initial)
-        )
+        initial and not isinstance(initial, str) and self.extend(initial)
 
     def __len__(self) -> int:
         return len(self._data)
